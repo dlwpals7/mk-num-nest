@@ -4,15 +4,34 @@ function avg(numbers) {
 }
 
 function prime(numbers) {
-    
-    
+    if (numbers <= 1) {
+        return false;
+    }
+
+    if (numbers === 2) {
+        return true;
+    }    
+
+    for (let i = 2; i <= Math.sqrt(numbers); i++) {
+        if (numbers % i === 0) {
+            return false;
+        }
+    }
     
     return true;
 }
 
 function factorial(numbers) {
     
-    result = 1;
+    if (numbers < 0 || numbers > 15) {
+        console.log("Invalid Number: factorial");
+        return -1;
+    }
+
+    let result = 1;
+    for (let i = 1; i <= numbers; i++) {
+        result *= i;
+    }
     
     return result;
 }
