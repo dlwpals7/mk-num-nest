@@ -14,15 +14,30 @@ test("Insufficient params", () => {
     });
 });
 
-test("Wrong command", () => {
+test("Wrong command", async () => {
     const main = spawn("node", ["main.js", "sum", "1", "2", "3"]);
     const outputs = [];
+    const errors = [];
+
     main.stdout.on("data", (chunk) => {
         outputs.push(chunk);
     });
 
-    main.stdout.on("end", () => {
-        const output = outputs.join("").trim();
-        expect(output).toBe("Wrong command!");
+    main.stderr.on("data", (chunk) => {
+        errors.push(chunk.toString());
     });
+
+    const promise = new Promise((resolve) => {
+        main.stdout.on("end", () => {
+            const output = outputs.join("").trim();
+            resolve(output);
+        });
+    });
+
+    const output = await promise;
+    if (errors.length > 0) {
+        console.error("Error Output:", errors.join(""));
+    }
+
+    expect(output).toBe("Wrong command!");
 });
